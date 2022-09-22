@@ -6,8 +6,13 @@ const { Client, Collection, GatewayIntentBits } = require("discord.js");
 const fs = require("fs");
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
+});
 client.commands = new Collection();
+client.buttons = new Collection();
+client.selectMenus = new Collection();
+client.modals = new Collection();
 client.commandArray = [];
 
 const functionFolders = fs.readdirSync("./src/functions");
@@ -22,4 +27,5 @@ for (const folder of functionFolders) {
 
 client.handleEvents();
 client.handleCommands();
+client.handleComponents();
 client.login(token);

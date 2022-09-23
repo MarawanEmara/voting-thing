@@ -20,15 +20,18 @@ module.exports = (client) => {
 
     const clientId = process.env.DISCORD_CLIENT_ID;
     const guildId = process.env.DISCORD_GUILD_ID;
+    const guildIds = [
+      process.env.DISCORD_GUILD_ID,
+      process.env.DISCORD_GUILD_ID_2,
+    ];
     const rest = new REST({ version: "9" }).setToken(process.env.DISCORD_TOKEN);
     try {
       console.log("Started refreshing application (/) commands.");
-      const data = await rest.put(
-        Routes.applicationGuildCommands(clientId, guildId),
-        {
+      for (const guildId of guildIds) {
+        await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
           body: client.commandArray,
-        }
-      );
+        });
+      }
       console.log("Successfully reloaded application (/) commands.");
     } catch (error) {
       console.error(error);

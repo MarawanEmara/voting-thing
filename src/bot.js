@@ -6,8 +6,11 @@ const { Client, Collection, GatewayIntentBits } = require("discord.js");
 const fs = require("fs");
 
 // Create a new client instance
+// All intents w/ 32767
+const { Guilds, GuildMembers, GuildMessages, GuildMessageReactions } =
+  GatewayIntentBits;
 const client = new Client({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
+  intents: [Guilds, GuildMembers, GuildMessages, GuildMessageReactions],
 });
 client.commands = new Collection();
 client.buttons = new Collection();

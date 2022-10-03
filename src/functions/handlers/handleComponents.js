@@ -20,7 +20,7 @@ module.exports = (client) => {
         case "selectMenus":
           for (const file of componentFiles) {
             const selectMenu = require(`../../components/${folder}/${file}`);
-            selectMenus.set(button.data.name, selectMenu);
+            selectMenus.set(selectMenu.data.name, selectMenu);
           }
 
         case "modals":

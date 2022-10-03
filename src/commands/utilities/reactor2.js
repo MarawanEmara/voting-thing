@@ -2,7 +2,7 @@ const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("reactor")
+    .setName("reactor2")
     .setDescription("Returns a bunch of reaction!")
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
   async execute(interaction, client) {
@@ -11,23 +11,17 @@ module.exports = {
       fetchReply: true,
     });
 
-    message.react("👍");
-
     const filter = (reaction, user) => {
-      return reaction.emoji.name == "👍" && user.id == interaction.user.id;
+      return reaction.emoji.name === "👍" && user.id === interaction.user.id;
     };
 
-    const collector = message.createReactionCollector({
-      filter,
-      time: 15000,
-    });
-
-    collector.on("collect", (reaction, user) => {
-      console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
-    });
-
-    collector.on("end", (collected) => {
-      console.log(`Collected ${collected.size} items`);
-    });
+    message
+      .awaitReactions({ filter, max: 1, time: 10000, errors: ["time"] })
+      .then((collected) => {
+        console.log(collected.size);
+      })
+      .catch((collected) => {
+        console.log(collected);
+      });
   },
 };

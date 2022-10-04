@@ -65,6 +65,20 @@ module.exports = {
       } catch (error) {
         console.error(error);
       }
+    } else if (
+      interaction.type == InteractionType.ApplicationCommandAutocomplete
+    ) {
+      const { commands } = client;
+      const { commandName } = interaction;
+      const command = commands.get(commandName);
+      if (!command)
+        return new Error("There is no code for this autocomplete command!");
+
+      try {
+        await command.autocomplete(interaction, client);
+      } catch (error) {
+        console.error(error);
+      }
     }
   },
 };

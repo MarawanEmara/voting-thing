@@ -3,8 +3,9 @@ require("dotenv").config();
 // Dependencies
 const noblox = require("noblox.js");
 
-module.exports = async () => {
-  const currentUser = await noblox.setCookie(process.env.ROBLOSECURITY_TOKEN);
+module.exports = (client) => {
+  client.getMessages = async () => {
+    const currentUser = await noblox.setCookie(process.env.ROBLOSECURITY_TOKEN);
   console.log("Logged in as " + currentUser.UserName);
   var senders_list = [];
   messages = await noblox
@@ -25,4 +26,5 @@ module.exports = async () => {
     });
   console.log(senders_list);
   return senders_list;
+  };
 };

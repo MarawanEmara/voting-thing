@@ -6,23 +6,29 @@ module.exports = (client) => {
     const options = [
       {
         type: ActivityType.Watching,
-        text: `${client.guilds.cache.size} servers!`,
+        text: `over ${client.guilds.cache.size} server${withOrWithouts(
+          client.guilds.cache.size
+        )}!`,
         status: "online",
       },
       {
         type: ActivityType.Listening,
-        text: `for commands`,
-        status: "idle",
+        text: `${client.users.cache.size} user${withOrWithouts(
+          client.users.cache.size
+        )}!`,
+        status: "online",
       },
       {
         type: ActivityType.Playing,
-        text: `with ${client.users.cache.size} users!`,
+        text:
+          `with ${client.users.cache.size} user${withOrWithouts(
+            client.users.cache.size
+          )}!` || "with the code!",
         status: "dnd",
       },
     ];
 
     const option = Math.floor(Math.random() * options.length);
-    console.log(option);
 
     try {
       client.user.setPresence({
@@ -34,9 +40,16 @@ module.exports = (client) => {
         ],
         status: options[option].status,
       });
-      console.log(`Presence changed`);
     } catch (error) {
       console.log(error);
     }
   };
+};
+
+withOrWithouts = (number) => {
+  if (number < 2) {
+    return "";
+  } else {
+    return "s";
+  }
 };

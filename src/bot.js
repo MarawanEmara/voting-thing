@@ -9,10 +9,22 @@ const fs = require("fs");
 
 // Create a new client instance
 // All intents w/ 32767
-const { Guilds, GuildMembers, GuildMessages, GuildMessageReactions } =
-  GatewayIntentBits;
+const {
+  Guilds,
+  GuildMembers,
+  GuildMessages,
+  GuildMessageReactions,
+  MessageContent,
+} = GatewayIntentBits;
+// Guilds, GuildMembers, GuildMessages, GuildMessageReactions
 const client = new Client({
-  intents: [Guilds, GuildMembers, GuildMessages, GuildMessageReactions],
+  intents: [
+    Guilds,
+    GuildMembers,
+    GuildMessages,
+    GuildMessageReactions,
+    MessageContent,
+  ],
 });
 client.commands = new Collection();
 client.buttons = new Collection();

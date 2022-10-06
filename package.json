@@ -16,6 +16,7 @@
     "dotenv": "^16.0.2",
     "mongoose": "^6.6.4",
     "noblox.js": "^4.13.1",
-    "rss-parser": "^3.12.0"
+    "rss-parser": "^3.12.0",
+    "sentencer": "^0.2.1"
   }
 }

@@ -15,6 +15,8 @@ const {
   GuildMessages,
   GuildMessageReactions,
   MessageContent,
+  DirectMessages,
+  DirectMessageReactions,
 } = GatewayIntentBits;
 // Guilds, GuildMembers, GuildMessages, GuildMessageReactions
 const client = new Client({
@@ -24,6 +26,8 @@ const client = new Client({
     GuildMessages,
     GuildMessageReactions,
     MessageContent,
+    DirectMessages,
+    DirectMessageReactions,
   ],
 });
 client.commands = new Collection();

@@ -21,6 +21,7 @@ module.exports = (client) => {
           .createDM()
           .then((dm) => {
             dm.send({ embeds: [embed] });
+            interaction.deferReply();
           })
           .catch((err) => {
             interaction.reply({
@@ -38,6 +39,7 @@ module.exports = (client) => {
             .setDescription("What is your current Roblox username?")
             .setColor("#57F287");
           dm = await interaction.user.createDM();
+          await interaction.deferReply();
           await dm.send({ embeds: [embed] });
         } catch (error) {
           await interaction.reply({
@@ -68,7 +70,6 @@ module.exports = (client) => {
         try {
           robloxID = await noblox.getIdFromUsername(username);
         } catch (error) {
-          console.log(error);
           const embed = new EmbedBuilder()
             .setTitle("User Verification")
             .setDescription("That username does not exist. Please try again.")
@@ -200,7 +201,7 @@ module.exports = (client) => {
           });
           return awaitUsername.first().content;
         } catch (error) {
-          throw new Error("User did not respond in time.");
+          throw error;
         }
       }
 
@@ -217,8 +218,7 @@ module.exports = (client) => {
           });
           return awaitVerification;
         } catch (error) {
-          console.log(error);
-          throw new Error("User did not respond in time.");
+          throw error;
         }
       }
 

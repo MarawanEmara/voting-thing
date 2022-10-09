@@ -7,7 +7,6 @@ const Sentencer = require("sentencer");
 
 module.exports = (client) => {
   client.verifyUser = async (interaction, userID) => {
-    const bot = await noblox.setCookie(process.env.ROBLOSECURITY_TOKEN);
     verifiedUsers.countDocuments({ discordID: userID }, async (err, count) => {
       if (count > 0) {
         const embed = new EmbedBuilder()
@@ -97,7 +96,7 @@ module.exports = (client) => {
           const embed = new EmbedBuilder()
             .setTitle("User Verification")
             .setDescription(
-              `Please include the following in your Roblox description: ${verificationString}`
+              `Please include the following in your Roblox description: \`${verificationString}\`.`
             )
             .setColor("#57F287");
           dm.send({ embeds: [embed] });

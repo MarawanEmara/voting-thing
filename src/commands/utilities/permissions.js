@@ -17,6 +17,22 @@ module.exports = {
             .setDescription("The user to add.")
             .setRequired(true)
         )
+        .addStringOption((option) =>
+          option
+            .setName("permission")
+            .setDescription("The permission to add.")
+            .setRequired(true)
+            .addChoices(
+              {
+                name: "Administrator",
+                value: "admin",
+              },
+              {
+                name: "Election Manager",
+                value: "manager",
+              }
+            )
+        )
     )
     .addSubcommand((subcommand) =>
       subcommand
@@ -38,14 +54,6 @@ module.exports = {
             .setName("user")
             .setDescription("The user to change.")
             .setRequired(true)
-        )
-        .addStringOption((option) =>
-          option
-            .setName("permissions")
-            .setDescription("The permissions to change.")
-            .setRequired(true)
-            .addChoice("Administrator", "Administrator")
-            .addChoice("Election Manager", "Election Manager")
         )
         .addStringOption((option) =>
           option
@@ -72,6 +80,10 @@ module.exports = {
           content: "You do not have permission to use this command.",
           ephemeral: true,
         });
+      } else {
+        const user = interaction.options.getUser("user");
+        const permission = interaction.options.getString("permission");
+        client.addUser(interaction, user, permission);
       }
     } else if (interaction.options.getSubcommand() === "remove") {
     } else if (interaction.options.getSubcommand() === "change") {

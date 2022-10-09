@@ -15,7 +15,7 @@ const electionSchema = new Schema({
   electionName: String,
   creatorID: String,
   groupID: String,
-  parties: [[partySchema]],
+  parties: [partySchema],
   time: { type: Number, min: 12, max: 48, default: 24 },
   date: { type: Date, default: Date.now },
   lastUpdated: { type: Date, default: Date.now },

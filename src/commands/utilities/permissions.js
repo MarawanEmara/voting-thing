@@ -44,6 +44,12 @@ module.exports = {
             .setDescription("The user to remove.")
             .setRequired(true)
         )
+        .addStringOption((option) =>
+          option
+            .setName("permission")
+            .setDescription("The permission to remove.")
+            .setRequired(false)
+        )
     )
     .addSubcommand((subcommand) =>
       subcommand

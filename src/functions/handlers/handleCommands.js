@@ -6,7 +6,7 @@ module.exports = (client) => {
   client.handleCommands = async () => {
     const commandFolders = fs.readdirSync("./src/commands");
     for (const folder of commandFolders) {
-      if (folder === "owner") continue;
+      if (folder === "ignore") continue;
 
       const commandFiles = fs
         .readdirSync(`./src/commands/${folder}`)

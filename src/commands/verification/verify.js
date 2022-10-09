@@ -6,6 +6,6 @@ module.exports = {
     .setDescription("Verifies the user's identity."),
   async execute(interaction, client) {
     const user = await interaction.user;
-    client.checkUser(interaction, user.id);
+    client.verifyUser(interaction, user.id);
   },
 };

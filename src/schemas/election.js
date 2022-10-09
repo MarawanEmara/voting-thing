@@ -3,6 +3,7 @@ const { Schema, model } = require("mongoose");
 const partySchema = new Schema({
   _id: Schema.Types.ObjectId,
   partyName: String,
+  partyNameAbbreviation: String,
   partyLeader: String,
   partyManifesto: String,
 });

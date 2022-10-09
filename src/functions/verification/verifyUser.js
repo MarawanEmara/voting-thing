@@ -6,7 +6,7 @@ const verifiedUsers = require("../../schemas/verified-users");
 const Sentencer = require("sentencer");
 
 module.exports = (client) => {
-  client.checkUser2 = async (interaction, userID) => {
+  client.verifyUser = async (interaction, userID) => {
     const bot = await noblox.setCookie(process.env.ROBLOSECURITY_TOKEN);
     verifiedUsers.countDocuments({ discordID: userID }, async (err, count) => {
       if (count > 0) {

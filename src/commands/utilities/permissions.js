@@ -49,6 +49,16 @@ module.exports = {
             .setName("permission")
             .setDescription("The permission to remove.")
             .setRequired(false)
+            .addChoices(
+              {
+                name: "Administrator",
+                value: "admin",
+              },
+              {
+                name: "Election Manager",
+                value: "manager",
+              }
+            )
         )
     )
     .addSubcommand((subcommand) =>
@@ -92,6 +102,16 @@ module.exports = {
         client.addUser(interaction, user, permission);
       }
     } else if (interaction.options.getSubcommand() === "remove") {
+      if (interaction.user.id !== botOwnerID) {
+        return interaction.reply({
+          content: "You do not have permission to use this command.",
+          ephemeral: true,
+        });
+      } else {
+        const user = interaction.options.getUser("user");
+        const permission = interaction.options.getString("permission");
+        client.removeUser(interaction, user, permission);
+      }
     } else if (interaction.options.getSubcommand() === "change") {
     } else if (interaction.options.getSubcommand() === "list") {
     }

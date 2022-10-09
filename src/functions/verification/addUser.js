@@ -1,6 +1,5 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
-const { EmbedBuilder } = require("discord.js");
 const botOwnerID = process.env.OWNER_ID;
 const userPermissionsDB = require("../../schemas/user-permissions");
 

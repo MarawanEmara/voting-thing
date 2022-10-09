@@ -25,7 +25,7 @@ module.exports = (client) => {
                 content: "You do not have permission to do that.",
                 ephemeral: true,
               });
-            } else if (basicCount < 1) {
+            } else if (basicCount == 0) {
               interaction.reply({
                 content: "That user does not have any permissions.",
                 ephemeral: true,
@@ -44,12 +44,12 @@ module.exports = (client) => {
                     try {
                       await data.save();
                       interaction.reply({
-                        content: `Removed ${permission} from ${user.tag}.`,
+                        content: `Removed ${permission} from ${user}.`,
                         ephemeral: true,
                       });
                     } catch (err) {
                       interaction.reply({
-                        content: `There was an error removing ${permission} from ${user.tag}. Please try again later.`,
+                        content: `There was an error removing ${permission} from ${user}. Please try again later.`,
                         ephemeral: true,
                       });
                     }
@@ -62,7 +62,7 @@ module.exports = (client) => {
                 async (err, data) => {
                   if (data) {
                     interaction.reply({
-                      content: `Removed all permissions from ${user.tag}.`,
+                      content: `Removed all permissions from ${user}.`,
                       ephemeral: true,
                     });
                   }

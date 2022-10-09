@@ -40,12 +40,12 @@ module.exports = (client) => {
                       try {
                         await data.save();
                         interaction.reply({
-                          content: `Added ${permission} to ${user.tag}.`,
+                          content: `Added ${permission} permissions to ${user}.`,
                           ephemeral: true,
                         });
                       } catch (err) {
                         interaction.reply({
-                          content: `There was an error adding ${permission} to ${user.tag}. Please try again later.`,
+                          content: `There was an error adding ${permission} to ${user}. Please try again later.`,
                           ephemeral: true,
                         });
                       }
@@ -61,12 +61,12 @@ module.exports = (client) => {
                 try {
                   await newUser.save();
                   interaction.reply({
-                    content: `Successfully added ${permission} to ${user.tag}.`,
+                    content: `Successfully added ${permission} to ${user}.`,
                     ephemeral: true,
                   });
                 } catch (error) {
                   interaction.reply({
-                    content: `There was an error adding ${permission} to ${user.tag}. Please try again later.`,
+                    content: `There was an error adding ${permission} to ${user}. Please try again later.`,
                     ephemeral: true,
                   });
                 }

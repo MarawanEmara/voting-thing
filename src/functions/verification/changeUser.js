@@ -1,9 +1,8 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
-const noblox = require("noblox.js");
-const { EmbedBuilder } = require("discord.js");
-const verifiedUsers = require("../../schemas/verified-users");
+const botOwnerID = process.env.OWNER_ID;
+const userPermissionsDB = require("../../schemas/user-permissions");
 
 module.exports = (client) => {
-  client.changeUser = async (interaction) => {};
+  client.changeUser = async (interaction, user, group) => {};
 };

@@ -6,6 +6,7 @@ const databaseToken = process.env.DATABASE_TOKEN;
 const { connect } = require("mongoose");
 const { Client, Collection, GatewayIntentBits } = require("discord.js");
 const fs = require("fs");
+//const discordModals = require("discord-modals"); // Define the discord-modals package!
 
 // Create a new client instance
 // All intents w/ 32767
@@ -30,6 +31,7 @@ const client = new Client({
     DirectMessageReactions,
   ],
 });
+//discordModals(client);
 client.commands = new Collection();
 client.buttons = new Collection();
 client.selectMenus = new Collection();

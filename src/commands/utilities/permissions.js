@@ -1,47 +1,6 @@
 require("dotenv").config();
 const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 const botOwnerID = process.env.OWNER_ID;
-const userPermissionsDB = require("../../schemas/user-permissions");
-
-// Returns a list of the user's permissions.
-checkUserPerms = (user) => {
-  userPermissionsDB.countDocuments({ discordID: user.id }, (err, count) => {
-    if (count == 0) {
-      return null;
-    } else {
-      userPermissionsDB.findOne({ discordID: user.id }, (err, data) => {
-        if (data) {
-          return data.userPermissions;
-        }
-      });
-    }
-  });
-};
-
-// Checks if a user has the admin permission.
-checkAdmin = (user) => {
-  userPermissionsDB.countDocuments(
-    { discordID: user.id, userPermissions: { $in: "admin" } },
-    (err, count) => {
-      if (count == 0) {
-        return false;
-      } else {
-        return true;
-      }
-    }
-  );
-};
-
-// Checks if a user has any permissions.
-checkUser = (user) => {
-  userPermissionsDB.countDocuments({ discordID: user.id }, (err, count) => {
-    if (count == 0) {
-      return false;
-    } else {
-      return true;
-    }
-  });
-};
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -104,19 +63,35 @@ module.exports = {
     )
     .addSubcommand((subcommand) =>
       subcommand
-        .setName("change")
-        .setDescription("Changes a user's permissions.")
+        .setName("group")
+        .setDescription("Changes a user's groups.")
         .addUserOption((option) =>
           option
             .setName("user")
-            .setDescription("The user to change.")
+            .setDescription("The user whose groups to change.")
             .setRequired(true)
         )
         .addStringOption((option) =>
           option
+            .setName("option")
+            .setDescription("Choose between adding or removing a group.")
+            .setRequired(true)
+            .addChoices(
+              {
+                name: "Add",
+                value: "add",
+              },
+              {
+                name: "Remove",
+                value: "remove",
+              }
+            )
+        )
+        .addStringOption((option) =>
+          option
             .setName("group")
-            .setDescription("The group to add permissions for.")
-            .setRequired(false)
+            .setDescription("The group ID to add or remove permissions for.")
+            .setRequired(true)
         )
     )
     .addSubcommand((subcommand) =>
@@ -126,16 +101,42 @@ module.exports = {
         .addUserOption((option) =>
           option
             .setName("user")
-            .setDescription("The user whoe permissions to list.")
+            .setDescription("The user whose permissions to list.")
             .setRequired(true)
+        )
+        .addStringOption((option) =>
+          option
+            .setName("option")
+            .setDescription(
+              "Choose between listing permissions or just groups."
+            )
+            .setRequired(true)
+            .addChoices(
+              {
+                name: "Permissions",
+                value: "perms",
+              },
+              {
+                name: "Groups",
+                value: "groups",
+              }
+            )
         )
     ),
   async execute(interaction, client) {
-    const isAdmin = checkAdmin(interaction.user);
-    const hasPerms = checkUser(interaction.user);
+    const isAdmin = await client.userHasAdmin(interaction.user).catch((err) => {
+      console.error(err);
+      return false;
+    });
+    const hasPerms = await client
+      .userHasPerms(interaction.user)
+      .catch((err) => {
+        console.error(err);
+        return false;
+      });
     if (interaction.options.getSubcommand() === "add") {
-      if (!(interaction.user.id == botOwnerID || isAdmin)) {
-        return interaction.reply({
+      if (!isAdmin) {
+        await interaction.reply({
           content: "You do not have permission to use this command.",
           ephemeral: true,
         });
@@ -145,8 +146,8 @@ module.exports = {
         client.addUser(interaction, user, permission);
       }
     } else if (interaction.options.getSubcommand() === "remove") {
-      if (!(interaction.user.id == botOwnerID || isAdmin)) {
-        return interaction.reply({
+      if (!isAdmin) {
+        await interaction.reply({
           content: "You do not have permission to use this command.",
           ephemeral: true,
         });
@@ -155,26 +156,38 @@ module.exports = {
         const permission = interaction.options.getString("permission");
         client.removeUser(interaction, user, permission);
       }
-    } else if (interaction.options.getSubcommand() === "change") {
-      if (!(interaction.user.id == botOwnerID || isAdmin)) {
-        return interaction.reply({
+    } else if (interaction.options.getSubcommand() === "group") {
+      if (!isAdmin) {
+        await interaction.reply({
           content: "You do not have permission to use this command.",
           ephemeral: true,
         });
       } else {
-        const user = interaction.options.getUser("user");
-        const group = interaction.options.getString("group");
-        client.changeUser(interaction, user, group);
+        const option = interaction.options.getString("option");
+        if (option == "add") {
+          const user = interaction.options.getUser("user");
+          const group = interaction.options.getString("group");
+          client.addGroup(interaction, user, group);
+        } else if (option == "remove") {
+          const user = interaction.options.getUser("user");
+          const group = interaction.options.getString("group");
+          client.removeGroup(interaction, user, group);
+        }
       }
     } else if (interaction.options.getSubcommand() === "list") {
-      if (!(interaction.user.id == botOwnerID || hasPerms)) {
-        return interaction.reply({
+      if (!hasPerms) {
+        await interaction.reply({
           content: "You do not have permission to use this command.",
           ephemeral: true,
         });
       } else {
         const user = interaction.options.getUser("user");
-        client.listUser(interaction, user);
+        const option = interaction.options.getString("option");
+        if (option == "perms") {
+          client.listPerms(interaction, user);
+        } else if (option == "groups") {
+          client.listGroups(interaction, user);
+        }
       }
     }
   },
